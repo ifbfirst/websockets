@@ -24,7 +24,7 @@ function handleRoomAction(ws, data) {
         [...connections.entries()].find(([n, s]) => s === ws)?.[0] ||
         `Guest_${Math.floor(Math.random() * 1000)}`;
       rooms[roomID].push({ name: playerName, index: roomID });
-      console.log(rooms);
+
       if (rooms[roomID].length === 2) {
         broadcastToRoom(roomID, {
           type: 'create_game',
@@ -43,4 +43,4 @@ function broadcastToRoom(roomID, message) {
     rooms[roomID].forEach(({ name }) => sendToPlayer(name, message));
   }
 }
-export { handleRoomAction, rooms };
+export { handleRoomAction, rooms, broadcastToRoom };

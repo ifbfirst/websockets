@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { handlePlayerAction } from './players.js';
-// import { handleGameAction } from './game.js';
+import { handleGameAction } from './game.js';
 import { httpServer } from './http_server/index.js';
 import { handleRoomAction, rooms } from './rooms.js';
 
@@ -21,14 +21,13 @@ wsServer.on('connection', (ws) => {
 
       if (data.type === 'reg') {
         handlePlayerAction(ws, data);
+        broadcastUpdateRoom();
       } else if (['create_room', 'add_user_to_room'].includes(data.type)) {
         handleRoomAction(ws, data);
         broadcastUpdateRoom();
-      }
-      //   else if (['add_ships', 'attack', 'randomAttack'].includes(data.type)) {
-      //     handleGameAction(ws, data);
-      //   }
-      else {
+      } else if (['add_ships', 'attack', 'randomAttack'].includes(data.type)) {
+        handleGameAction(ws, data);
+      } else {
         console.warn('Unknown command:', data.type);
       }
     } catch (error) {
